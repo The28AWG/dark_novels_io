@@ -32,8 +32,8 @@ class Request {
   /// замена пути
   Map<String, dynamic> path;
 
-  /// тип
-  Type? type;
+  /// атрибуты
+  Map<String, dynamic> attribute;
 
   ///
   Request(this.url, io)
@@ -41,6 +41,7 @@ class Request {
         this._io = io,
         this.headers = {},
         this.path = {},
+        this.attribute = {},
         this.binary = false;
 
   /// GET
@@ -75,7 +76,7 @@ class Request {
     model,
     query,
     body,
-    type,
+    attribute,
     binary,
     path,
   }) =>
@@ -88,7 +89,7 @@ class Request {
         model: model ?? this.model,
         query: query ?? this.query,
         body: body ?? this.body,
-        type: type ?? this.type,
+        attribute: Map.unmodifiable(attribute ?? this.attribute),
         binary: binary ?? this.binary,
       );
 }
@@ -133,7 +134,7 @@ class _ImmutableRequest extends Request {
 
   /// тип
   @override
-  final Type? type;
+  final Map<String, dynamic>  attribute;
 
   /// конструктор
   _ImmutableRequest._({
@@ -145,7 +146,7 @@ class _ImmutableRequest extends Request {
     this.model,
     this.query,
     this.body,
-    this.type,
+    required this.attribute,
     this.binary = false,
   })  : this._io = io,
         super(url, io);
