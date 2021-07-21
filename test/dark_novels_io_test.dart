@@ -1,8 +1,7 @@
 // import 'package:flutter_test/flutter_test.dart';
 import 'package:dark_novels_io/io.dart';
-import 'package:dark_novels_io/src/response.dart';
 
-Future<String> one() async => 'one';
+Future<Response> one(DarkIO io) => (io.newRequest('url')..post()).execute();
 
 void main() {
   // Request request = Request('/anything', DarkIO.url('https://httpbin.org'))
