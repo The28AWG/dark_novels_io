@@ -142,7 +142,7 @@ class DarkIO {
       headers['Accept'] = 'application/json';
     }
     return request.copyWith(
-      headers: request.headers,
+      headers: headers,
     );
   }
 

@@ -19,14 +19,16 @@ class UserAgentInterceptor extends Interceptor {
 
   @override
   Future<Request> onRequest(Request request) async {
-    Map<String, String> headers = request.headers;
+    Map<String, String> headers = {}..addAll(request.headers);
     if (!kIsWeb) {
       headers['User-Agent'] =
           'novels/${_version.value.name}+${_version.value.number}'
           ' ${_getHttpVersion()} ${Platform.operatingSystem}/'
           '${Platform.operatingSystemVersion}';
     }
-    return request;
+    return super.onRequest(request.copyWith(
+      headers: headers,
+    ));
   }
 
   String _getHttpVersion() {

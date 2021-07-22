@@ -10,8 +10,12 @@ class CookieInterceptor extends Interceptor {
 
   @override
   Future<Request> onRequest(Request request) {
-    request.headers.addAll(headers);
-    return super.onRequest(request);
+    Map<String, String> headers = {}
+      ..addAll(request.headers)
+      ..addAll(this.headers);
+    return super.onRequest(request.copyWith(
+      headers: headers,
+    ));
   }
 
   @override
