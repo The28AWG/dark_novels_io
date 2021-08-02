@@ -179,7 +179,6 @@ class DarkIO {
       case HttpMethod.POST:
         if (request.headers['Accept'] == 'multipart/form-data') {
           _ApiMultipartRequest _request = _ApiMultipartRequest(
-            'post',
             _uriBuilder(
               endpoint!,
               request,
@@ -273,11 +272,10 @@ class _ApiMultipartRequest extends http.MultipartRequest {
   final http.Client _httpClient;
 
   _ApiMultipartRequest(
-    String method,
     Uri url,
     httpClient,
   )   : this._httpClient = httpClient,
-        super(method, url);
+        super('POST', url);
 
   @override
   Future<http.StreamedResponse> send() => this._httpClient.send(this);
