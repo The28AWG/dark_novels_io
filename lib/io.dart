@@ -192,7 +192,9 @@ class DarkIO {
           if (request.model is http.MultipartFile) {
             _request.files.add(request.model);
           }
-          _request.headers.addAll(request.headers);
+          Map<String, String> headers = {}..addAll(request.headers);
+          headers.remove('Accept');
+          _request.headers.addAll(headers);
           return http.Response.fromStream(await _request.send()).then(
             (value) => RequestWrapper(
               value,
