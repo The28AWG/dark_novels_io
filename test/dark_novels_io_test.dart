@@ -2,15 +2,28 @@
 import 'package:dark_novels_io/io.dart';
 
 void main() {
-  // DarkIO.url('https://httpbin.org').newRequest('/post')
-  DarkIO.url('https://api.dark-novels.ru').newRequest('/v2/chapter/')
-    ..query = GetChapter(
-      bookId: 514,
-      chapterId: 345834,
-      format: 'html'
-    )
-    ..upload()
+  DarkIO.url('https://httpbin.org').newRequest('/post')
+    // DarkIO.url('https://api.dark-novels.ru').newRequest('/v2/chapter/')
+    // DarkIO(
+    //   http.Client(),
+    //   Uri.parse('http://api.localhost'),
+    //   [
+    //     // UserAgentInterceptor(),
+    //     TokenInterceptor(),
+    //   ],
+    // ).newRequest('/v2/chapter/')
+    ..model = _toMap('s', 3)
+    ..post()
     ..execute().then(debugResponse);
+}
+
+Map<String, dynamic> _toMap(
+  String key,
+  dynamic value,
+) {
+  Map<String, dynamic> t = {};
+  t[key] = value;
+  return t;
 }
 
 class GetChapter {
@@ -42,4 +55,5 @@ void debugResponse(Response response) => print(
     'reasonPhrase: ${response.rawResponse.reasonPhrase}\n'
     'persistentConnection: ${response.rawResponse.persistentConnection}\n'
     'headers: ${response.rawResponse.headers}\n'
+    'headers: ${response.rawResponse.request?.headers}\n'
     '${response.rawResponse.body}');
