@@ -1,14 +1,15 @@
 import 'package:dark_novels_io/io.dart';
-import 'package:dotenv/dotenv.dart' show load, env, isEveryDefined;
+import 'package:dotenv/dotenv.dart';
 
 /// токен
 class TokenInterceptor extends Interceptor {
 
   @override
   Future<Request> onRequest(Request request) async {
-    load();
+    var env = DotEnv(includePlatformEnvironment: true)
+      ..load();
     Map<String, String> headers = {}..addAll(request.headers);
-    if (isEveryDefined(['token'])) {
+    if (env.isDefined('token')) {
       headers['Token'] = env['token']!;
     }
     return super.onRequest(request.copyWith(

@@ -1,20 +1,25 @@
 // import 'package:flutter_test/flutter_test.dart';
 import 'package:dark_novels_io/io.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  DarkIO.url('https://httpbin.org').newRequest('/post')
-    // DarkIO.url('https://api.dark-novels.ru').newRequest('/v2/chapter/')
-    // DarkIO(
-    //   http.Client(),
-    //   Uri.parse('http://api.localhost'),
-    //   [
-    //     // UserAgentInterceptor(),
-    //     TokenInterceptor(),
-    //   ],
-    // ).newRequest('/v2/chapter/')
-    ..model = _toMap('s', 3)
-    ..post()
-    ..execute().then(debugResponse);
+  test('I must failed', () async {
+    Response response = await (DarkIO.url('https://httpbin.org')
+            .newRequest('/post')
+          // DarkIO.url('https://api.dark-novels.ru').newRequest('/v2/chapter/')
+          // DarkIO(
+          //   http.Client(),
+          //   Uri.parse('http://api.localhost'),
+          //   [
+          //     // UserAgentInterceptor(),
+          //     TokenInterceptor(),
+          //   ],
+          // ).newRequest('/v2/chapter/')
+          ..model = _toMap('s', 3)
+          ..post())
+        .execute();
+    debugResponse(response);
+  });
 }
 
 Map<String, dynamic> _toMap(

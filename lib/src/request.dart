@@ -1,18 +1,17 @@
 import 'package:dark_novels_io/io.dart';
-import 'package:dark_novels_io/src/response.dart';
-import 'package:dark_novels_io/src/utils.dart';
 import 'package:meta/meta.dart';
 
 /// Вспомогательный класс
 class Request {
   ///
-  final DarkIO _io;
+  @protected
+  final DarkIO io;
 
   /// ссылка
   final String url;
 
   /// метод
-  late HttpMethod method;
+  HttpMethod method = HttpMethod.GET;
 
   /// модель
   dynamic model;
@@ -24,25 +23,19 @@ class Request {
   dynamic body;
 
   /// бинарное сообщение
-  bool binary;
+  bool binary = false;
 
   /// заголовки
-  Map<String, String> headers;
+  Map<String, String> headers = const {};
 
   /// замена пути
-  Map<String, dynamic> path;
+  Map<String, dynamic> path = const {};
 
   /// атрибуты
-  Map<String, dynamic> attribute;
+  Map<String, dynamic> attribute = const {};
 
   ///
-  Request(this.url, io)
-      : this.method = HttpMethod.GET,
-        this._io = io,
-        this.headers = {},
-        this.path = {},
-        this.attribute = {},
-        this.binary = false;
+  Request(this.url, this.io);
 
   /// GET
   void get() => this.method = HttpMethod.GET;
@@ -65,7 +58,7 @@ class Request {
   void delete() => this.method = HttpMethod.DELETE;
 
   ///
-  Future<Response> execute() => _io.execute(this);
+  Future<Response> execute() => io.execute(this);
 
   /// изменение параметров
   Request copyWith({
@@ -81,7 +74,7 @@ class Request {
     path,
   }) =>
       _ImmutableRequest._(
-        io: io ?? this._io,
+        io: io ?? this.io,
         method: method ?? this.method,
         url: url ?? this.url,
         headers: Map.unmodifiable(headers ?? this.headers),
@@ -94,11 +87,10 @@ class Request {
       );
 }
 
-@immutable
 class _ImmutableRequest extends Request {
   ///
   @override
-  final DarkIO _io;
+  final DarkIO io;
 
   /// ссылка
   @override
@@ -134,11 +126,11 @@ class _ImmutableRequest extends Request {
 
   /// тип
   @override
-  final Map<String, dynamic>  attribute;
+  final Map<String, dynamic> attribute;
 
   /// конструктор
   _ImmutableRequest._({
-    required io,
+    required this.io,
     required this.method,
     required this.url,
     required this.headers,
@@ -148,8 +140,7 @@ class _ImmutableRequest extends Request {
     this.body,
     required this.attribute,
     this.binary = false,
-  })  : this._io = io,
-        super(url, io);
+  }) : super(url, io);
 
   /// GET
   @override

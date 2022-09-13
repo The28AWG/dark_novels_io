@@ -5,29 +5,18 @@ import 'package:http/http.dart' as http;
 /// Вспомогательный класс
 class Response {
   ///
-  final DarkIO _io;
+  final DarkIO io;
 
   ///
-  final Request _request;
+  final Request request;
 
   ///
-  final http.Response _rawResponse;
+  final http.Response rawResponse;
 
   ///
   const Response(
-    io,
-    request,
-    rawResponse,
-  )   : this._io = io,
-        this._request = request,
-        this._rawResponse = rawResponse;
-
-  ///
-  DarkIO get io => this._io;
-
-  ///
-  Request get request => this._request;
-
-  ///
-  http.Response get rawResponse => this._rawResponse;
+    this.io,
+    this.request,
+    this.rawResponse,
+  );
 }
