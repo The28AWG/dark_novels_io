@@ -200,7 +200,7 @@ class InternetException extends ApiException {
 }
 
 ///
-T? transform<T extends Object>(
+T transform<T extends Object>(
   Response value, [
   T Function(dynamic)? map,
 ]) {
