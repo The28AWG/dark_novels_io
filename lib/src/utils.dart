@@ -90,21 +90,23 @@ class ApiResponse extends Equatable {
     Function(dynamic)? map,
   ]) {
     String? status = json['status'];
+    String? message = json['message'];
+    dynamic data = json['data'];
     if (status == 'error' || status == null) {
-      Map<String, dynamic> errors;
-      if (json['data'] is Map<String, dynamic>) {
-        errors = json['data'];
-      } else {
+      Map<String, dynamic>? errors;
+      if (data is Map<String, dynamic>) {
+        errors = data;
+      } else if (data != null) {
         errors = {
-          'error': json['data'],
+          'error': data,
         };
       }
-      throw ApiException(json['message'], errors);
+      throw ApiException(message, errors);
     }
     return ApiResponse._(
       status: status,
-      message: json['message'],
-      data: map?.call(json['data']) ?? json['data'],
+      message: message,
+      data: map?.call(data) ?? data,
     );
   }
 

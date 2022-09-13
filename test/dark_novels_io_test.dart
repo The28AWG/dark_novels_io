@@ -4,9 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('I must failed', () async {
-    Response response = await (DarkIO.url('https://httpbin.org')
-            .newRequest('/post')
-          // DarkIO.url('https://api.dark-novels.ru').newRequest('/v2/chapter/')
+    Response response = await (
+        // DarkIO.url('https://httpbin.org')
+        //     .newRequest('/post')
+          DarkIO.url('https://api.dark-novels.ru').newRequest('/v2/chapter/health')
           // DarkIO(
           //   http.Client(),
           //   Uri.parse('http://api.localhost'),
@@ -16,9 +17,10 @@ void main() {
           //   ],
           // ).newRequest('/v2/chapter/')
           ..model = _toMap('s', 3)
-          ..post())
+          ..get())
         .execute();
     debugResponse(response);
+    transform(response);
   });
 }
 
