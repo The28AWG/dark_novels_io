@@ -7,7 +7,7 @@ abstract class Interceptor {
   const Interceptor();
 
   /// перехват
-  Future<Request> onRequest(Request request) async => request;
+  Future<BaseRequest> onRequest(BaseRequest request) async => request;
 
   /// перехват
   Future<Response> onResponse(Response response) async => response;

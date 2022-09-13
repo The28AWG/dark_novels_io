@@ -1,5 +1,4 @@
 import 'package:dark_novels_io/io.dart';
-import 'package:dark_novels_io/src/request.dart';
 import 'package:http/http.dart' as http;
 
 /// Вспомогательный класс
@@ -8,7 +7,7 @@ class Response {
   final DarkIO io;
 
   ///
-  final Request request;
+  final BaseRequest request;
 
   ///
   final http.Response rawResponse;

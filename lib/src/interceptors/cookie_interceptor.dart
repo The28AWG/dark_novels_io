@@ -9,7 +9,7 @@ class CookieInterceptor extends Interceptor {
   Map<String, String> cookies = {};
 
   @override
-  Future<Request> onRequest(Request request) {
+  Future<BaseRequest> onRequest(BaseRequest request) {
     Map<String, String> headers = {}
       ..addAll(request.headers)
       ..addAll(this.headers);

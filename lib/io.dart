@@ -22,7 +22,7 @@ class RequestWrapper {
   final http.Response response;
 
   ///
-  final Request request;
+  final BaseRequest request;
 
   ///
   RequestWrapper(this.response, this.request);
@@ -79,26 +79,26 @@ class DarkIO {
 
   Uri _uriBuilder(
     Node endpoint,
-    Request request,
+      BaseRequest request,
   ) {
     switch (request.method) {
-      case HttpMethod.GET:
+      case HttpMethod.get:
         return _endpoint(
           endpoint: endpoint,
           query: encodeQuery(request.query),
           path: request.path,
         );
-      case HttpMethod.POST:
+      case HttpMethod.post:
         return _endpoint(
           endpoint: endpoint,
           path: request.path,
         );
-      case HttpMethod.PUT:
+      case HttpMethod.put:
         return _endpoint(
           endpoint: endpoint,
           path: request.path,
         );
-      case HttpMethod.DELETE:
+      case HttpMethod.delete:
         return _endpoint(
           endpoint: endpoint,
           query: encodeQuery(request.query),
@@ -107,11 +107,11 @@ class DarkIO {
     }
   }
 
-  Request _bodyBuilder(
-    Request request,
+  BaseRequest _bodyBuilder(
+      BaseRequest request,
   ) {
     switch (request.method) {
-      case HttpMethod.POST:
+      case HttpMethod.post:
         if (request.headers['Accept'] == 'multipart/form-data') {
           return request;
         }
@@ -123,7 +123,7 @@ class DarkIO {
                       ? encodeQuery(request.query)
                       : jsonEncode(request.model)),
         );
-      case HttpMethod.PUT:
+      case HttpMethod.put:
         return request.copyWith(
           body: request.body ?? request.model == null
               ? encodeQuery(request.query)
@@ -134,8 +134,8 @@ class DarkIO {
     }
   }
 
-  Request _headerBuilder(
-    Request request,
+  BaseRequest _headerBuilder(
+      BaseRequest request,
   ) {
     Map<String, String> headers = {}..addAll(request.headers);
     if (!headers.containsKey('Accept')) {
@@ -146,7 +146,7 @@ class DarkIO {
     );
   }
 
-  Future<RequestWrapper> _request(Request request) async {
+  Future<RequestWrapper> _request(BaseRequest request) async {
     request = _headerBuilder(request);
     request = _bodyBuilder(request);
     for (Interceptor interceptor in interceptors) {
@@ -158,9 +158,11 @@ class DarkIO {
     }
     List<String> parts = url.split('/');
     Node? endpoint;
-    parts.forEach((part) => endpoint = Node(part, endpoint));
+    for (var part in parts) {
+      endpoint = Node(part, endpoint);
+    }
     switch (request.method) {
-      case HttpMethod.GET:
+      case HttpMethod.get:
         return this
             .client
             .get(
@@ -176,26 +178,26 @@ class DarkIO {
                 request,
               ),
             );
-      case HttpMethod.POST:
+      case HttpMethod.post:
         if (request.headers['Accept'] == 'multipart/form-data') {
-          _ApiMultipartRequest _request = _ApiMultipartRequest(
+          _ApiMultipartRequest multipartRequest = _ApiMultipartRequest(
             _uriBuilder(
               endpoint!,
               request,
             ),
             this.client,
           );
-          _request.fields.addAll(encodeQuery(request.query) ?? {});
+          multipartRequest.fields.addAll(encodeQuery(request.query) ?? {});
           if (request.model is List<http.MultipartFile>) {
-            _request.files.addAll(request.model);
+            multipartRequest.files.addAll(request.model);
           }
           if (request.model is http.MultipartFile) {
-            _request.files.add(request.model);
+            multipartRequest.files.add(request.model);
           }
           Map<String, String> headers = {}..addAll(request.headers);
           headers.remove('Accept');
-          _request.headers.addAll(headers);
-          return http.Response.fromStream(await _request.send()).then(
+          multipartRequest.headers.addAll(headers);
+          return http.Response.fromStream(await multipartRequest.send()).then(
             (value) => RequestWrapper(
               value,
               request,
@@ -218,7 +220,7 @@ class DarkIO {
                 request,
               ),
             );
-      case HttpMethod.PUT:
+      case HttpMethod.put:
         return this
             .client
             .put(
@@ -235,7 +237,7 @@ class DarkIO {
                 request,
               ),
             );
-      case HttpMethod.DELETE:
+      case HttpMethod.delete:
         return this
             .client
             .delete(

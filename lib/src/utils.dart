@@ -3,22 +3,21 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dark_novels_io/io.dart';
-import 'package:dark_novels_io/src/response.dart';
 import 'package:equatable/equatable.dart';
 
 /// http методы
 enum HttpMethod {
   /// get
-  GET,
+  get,
 
   /// post
-  POST,
+  post,
 
   /// put
-  PUT,
+  put,
 
   /// delete
-  DELETE,
+  delete,
 }
 
 ///
@@ -34,9 +33,9 @@ Map<String, dynamic> _fillQuery(query) {
   Map<String, dynamic> queryParameters = {};
   if (query != null) {
     if (query is List) {
-      query.forEach((element) {
+      for (var element in query) {
         queryParameters.addAll(_fillQuery(element));
-      });
+      }
     } else if (query is Map) {
       queryParameters.addAll(query as Map<String, dynamic>);
     } else {
@@ -81,10 +80,9 @@ class ApiResponse extends Equatable {
   const ApiResponse.error({this.message, this.data}) : this.status = 'error';
 
   ///
-  const ApiResponse.binary(Uint8List data)
+  const ApiResponse.binary(Uint8List this.data)
       : this.status = 'success',
-        this.message = 'binary',
-        this.data = data;
+        this.message = 'binary';
 
   ///
   factory ApiResponse.parse(
@@ -106,7 +104,7 @@ class ApiResponse extends Equatable {
     return ApiResponse._(
       status: status,
       message: json['message'],
-      data: map?.call(json['data']) ?? json['data'] ?? null,
+      data: map?.call(json['data']) ?? json['data'],
     );
   }
 

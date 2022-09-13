@@ -8,29 +8,29 @@ class LoggerInterceptor extends Interceptor {
   LoggerInterceptor([this._log = print]);
 
   @override
-  Future<Request> onRequest(Request request) async {
+  Future<BaseRequest> onRequest(BaseRequest request) async {
     switch (request.method) {
-      case HttpMethod.GET:
+      case HttpMethod.get:
         _get(request);
         break;
-      case HttpMethod.POST:
+      case HttpMethod.post:
         _post(request);
         break;
-      case HttpMethod.PUT:
+      case HttpMethod.put:
         _put(request);
         break;
-      case HttpMethod.DELETE:
+      case HttpMethod.delete:
         _delete(request);
         break;
     }
     return request;
   }
 
-  void _get(Request request) {
+  void _get(BaseRequest request) {
     _log('curl ${_headers(request)} "${request.url}"');
   }
 
-  void _post(Request request) {
+  void _post(BaseRequest request) {
     if (request.headers['Accept'] == 'multipart/form-data') {
       _log('curl -X POST ${_headers(request)} "${request.url}"');
     } else {
@@ -39,21 +39,21 @@ class LoggerInterceptor extends Interceptor {
     }
   }
 
-  void _put(Request request) {
+  void _put(BaseRequest request) {
     _log('curl ${_body(request)} ${_headers(request)}'
         ' -X PUT "${request.url}"');
   }
 
-  void _delete(Request request) {
+  void _delete(BaseRequest request) {
     _log('curl ${_headers(request)} -X DELETE "${request.url}"');
   }
 
-  String _headers(Request request) => request.headers.entries
+  String _headers(BaseRequest request) => request.headers.entries
       .map((e) => '-H "${e.key}: ${e.value}"')
       .toList()
       .join(' ');
 
-  String _body(Request request) => (request.body is Map)
+  String _body(BaseRequest request) => (request.body is Map)
       ? (request.body as Map)
           .entries
           .map((e) => '-F "${e.key}=${e.value}"')

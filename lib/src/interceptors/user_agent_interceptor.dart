@@ -11,14 +11,14 @@ class UserAgentInterceptor extends Interceptor {
   UserAgentInterceptor([version])
       : this._version = version ??
             ValueNotifier(
-              Version(
+              const Version(
                 'Unknown',
                 'Unknown',
               ),
             );
 
   @override
-  Future<Request> onRequest(Request request) async {
+  Future<BaseRequest> onRequest(BaseRequest request) async {
     Map<String, String> headers = {}..addAll(request.headers);
     if (!kIsWeb) {
       headers['User-Agent'] =

@@ -1,8 +1,7 @@
 import 'package:dark_novels_io/io.dart';
 import 'package:meta/meta.dart';
 
-/// Вспомогательный класс
-class Request {
+abstract class BaseRequest {
   ///
   @protected
   final DarkIO io;
@@ -11,7 +10,7 @@ class Request {
   final String url;
 
   /// метод
-  HttpMethod method = HttpMethod.GET;
+  HttpMethod method = HttpMethod.get;
 
   /// модель
   dynamic model;
@@ -35,33 +34,119 @@ class Request {
   Map<String, dynamic> attribute = const {};
 
   ///
+  BaseRequest(this.url, this.io);
+
+  /// GET
+  void get();
+
+  /// POST
+  void post();
+
+  /// POST upload
+  void upload();
+
+  /// PUT
+  void put();
+
+  /// DELETE
+  void delete();
+
+  ///
+  Future<Response> execute();
+
+  /// изменение параметров
+  BaseRequest copyWith({
+    io,
+    method,
+    url,
+    headers,
+    model,
+    query,
+    body,
+    attribute,
+    binary,
+    path,
+  });
+}
+
+/// Вспомогательный класс
+class Request implements BaseRequest {
+  ///
+  @override
+  @protected
+  final DarkIO io;
+
+  /// ссылка
+  @override
+  final String url;
+
+  /// метод
+  @override
+  HttpMethod method = HttpMethod.get;
+
+  /// модель
+  @override
+  dynamic model;
+
+  /// параметры запроса
+  @override
+  dynamic query;
+
+  /// тело запроса
+  @override
+  dynamic body;
+
+  /// бинарное сообщение
+  @override
+  bool binary = false;
+
+  /// заголовки
+  @override
+  Map<String, String> headers = const {};
+
+  /// замена пути
+  @override
+  Map<String, dynamic> path = const {};
+
+  /// атрибуты
+  @override
+  Map<String, dynamic> attribute = const {};
+
+  ///
   Request(this.url, this.io);
 
   /// GET
-  void get() => this.method = HttpMethod.GET;
+  @override
+  void get() => this.method = HttpMethod.get;
 
   /// POST
-  void post() => this.method = HttpMethod.POST;
+  @override
+  void post() => this.method = HttpMethod.post;
 
   /// POST upload
+  @override
   void upload() {
-    this.method = HttpMethod.POST;
+    this.method = HttpMethod.post;
     if (this.headers['Accept'] != 'multipart/form-data') {
       this.headers['Accept'] = 'multipart/form-data';
     }
   }
 
   /// PUT
-  void put() => this.method = HttpMethod.PUT;
+  @override
+  void put() => this.method = HttpMethod.put;
 
   /// DELETE
-  void delete() => this.method = HttpMethod.DELETE;
+  @override
+  void delete() => this.method = HttpMethod.delete;
 
   ///
+  @override
   Future<Response> execute() => io.execute(this);
 
   /// изменение параметров
-  Request copyWith({
+  @override
+  BaseRequest copyWith({
     io,
     method,
     url,
@@ -87,7 +172,7 @@ class Request {
       );
 }
 
-class _ImmutableRequest extends Request {
+class _ImmutableRequest implements BaseRequest {
   ///
   @override
   final DarkIO io;
@@ -140,7 +225,7 @@ class _ImmutableRequest extends Request {
     this.body,
     required this.attribute,
     this.binary = false,
-  }) : super(url, io);
+  });
 
   /// GET
   @override
@@ -165,4 +250,60 @@ class _ImmutableRequest extends Request {
   ///
   @override
   Future<Response> execute() => throw UnsupportedError('immutable request');
+
+  @override
+  set attribute(Map<String, dynamic> attribute) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  set binary(bool binary) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  set body(body) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  BaseRequest copyWith({
+    io,
+    method,
+    url,
+    headers,
+    model,
+    query,
+    body,
+    attribute,
+    binary,
+    path,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  set headers(Map<String, String> headers) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  set method(HttpMethod method) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  set model(model) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  set path(Map<String, dynamic> path) {
+    throw UnsupportedError('immutable request');
+  }
+
+  @override
+  set query(query) {
+    throw UnsupportedError('immutable request');
+  }
 }

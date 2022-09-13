@@ -16,7 +16,7 @@ class Node {
   String get(
     Map<String, dynamic> path,
   ) =>
-      _parent(path) + '/${path.containsKey(part) ? path[part] : part}';
+      '${_parent(path)}/${path.containsKey(part) ? path[part] : part}';
 
   String _parent(
     Map<String, dynamic> path,
