@@ -112,8 +112,22 @@ class Request implements BaseRequest {
   @override
   Map<String, dynamic> attribute = const {};
 
-  ///
+  /// конструктор
   Request(this.url, this.io);
+
+  /// конструктор
+  Request._({
+    required this.io,
+    required this.method,
+    required this.url,
+    required this.headers,
+    required this.path,
+    this.model,
+    this.query,
+    this.body,
+    required this.attribute,
+    this.binary = false,
+  });
 
   /// GET
   @override
@@ -158,152 +172,16 @@ class Request implements BaseRequest {
     binary,
     path,
   }) =>
-      _ImmutableRequest._(
+      Request._(
         io: io ?? this.io,
         method: method ?? this.method,
         url: url ?? this.url,
-        headers: Map.unmodifiable(headers ?? this.headers),
-        path: Map.unmodifiable(path ?? this.path),
+        headers: headers ?? this.headers,
+        path: path ?? this.path,
         model: model ?? this.model,
         query: query ?? this.query,
         body: body ?? this.body,
-        attribute: Map.unmodifiable(attribute ?? this.attribute),
+        attribute: attribute ?? this.attribute,
         binary: binary ?? this.binary,
       );
-}
-
-class _ImmutableRequest implements BaseRequest {
-  ///
-  @override
-  final DarkIO io;
-
-  /// ссылка
-  @override
-  final String url;
-
-  /// метод
-  @override
-  final HttpMethod method;
-
-  /// модель
-  @override
-  final dynamic model;
-
-  /// параметры запроса
-  @override
-  final dynamic query;
-
-  /// тело запроса
-  @override
-  final dynamic body;
-
-  /// бинарное сообщение
-  @override
-  final bool binary;
-
-  /// заголовки
-  @override
-  final Map<String, String> headers;
-
-  /// замена пути
-  @override
-  final Map<String, dynamic> path;
-
-  /// тип
-  @override
-  final Map<String, dynamic> attribute;
-
-  /// конструктор
-  _ImmutableRequest._({
-    required this.io,
-    required this.method,
-    required this.url,
-    required this.headers,
-    required this.path,
-    this.model,
-    this.query,
-    this.body,
-    required this.attribute,
-    this.binary = false,
-  });
-
-  /// GET
-  @override
-  void get() => throw UnsupportedError('immutable request');
-
-  /// POST
-  @override
-  void post() => throw UnsupportedError('immutable request');
-
-  /// POST upload
-  @override
-  void upload() => throw UnsupportedError('immutable request');
-
-  /// PUT
-  @override
-  void put() => throw UnsupportedError('immutable request');
-
-  /// DELETE
-  @override
-  void delete() => throw UnsupportedError('immutable request');
-
-  ///
-  @override
-  Future<Response> execute() => throw UnsupportedError('immutable request');
-
-  @override
-  set attribute(Map<String, dynamic> attribute) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  set binary(bool binary) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  set body(body) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  BaseRequest copyWith({
-    io,
-    method,
-    url,
-    headers,
-    model,
-    query,
-    body,
-    attribute,
-    binary,
-    path,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  set headers(Map<String, String> headers) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  set method(HttpMethod method) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  set model(model) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  set path(Map<String, dynamic> path) {
-    throw UnsupportedError('immutable request');
-  }
-
-  @override
-  set query(query) {
-    throw UnsupportedError('immutable request');
-  }
 }
