@@ -17,7 +17,7 @@ void main() {
           //   ],
           // ).newRequest('/v2/chapter/')
           ..model = _toMap('s', 3)
-          ..get())
+          ..upload())
         .execute();
     debugResponse(response);
     transform(response);

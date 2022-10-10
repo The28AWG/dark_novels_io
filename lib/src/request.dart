@@ -25,13 +25,13 @@ abstract class BaseRequest {
   bool binary = false;
 
   /// заголовки
-  Map<String, String> headers = const {};
+  Map<String, String> headers = {};
 
   /// замена пути
-  Map<String, dynamic> path = const {};
+  Map<String, dynamic> path = {};
 
   /// атрибуты
-  Map<String, dynamic> attribute = const {};
+  Map<String, dynamic> attribute = {};
 
   ///
   BaseRequest(this.url, this.io);
@@ -102,15 +102,15 @@ class Request implements BaseRequest {
 
   /// заголовки
   @override
-  Map<String, String> headers = const {};
+  Map<String, String> headers = {};
 
   /// замена пути
   @override
-  Map<String, dynamic> path = const {};
+  Map<String, dynamic> path = {};
 
   /// атрибуты
   @override
-  Map<String, dynamic> attribute = const {};
+  Map<String, dynamic> attribute = {};
 
   /// конструктор
   Request(this.url, this.io);
